@@ -174,12 +174,12 @@ class TrainConfig(object):
         self._model_output_path = o
 
 
-def createDefaultTrainConfig():
+def create_default_trainConfig():
     default_config = TrainConfig()
     return default_config
 
 
-default_train_config = createDefaultTrainConfig()
+default_train_config = create_default_trainConfig()
 
 
 def load_training_info(train_config_):
@@ -282,7 +282,7 @@ def trainModel(train_config_):
     # crop top and bottom portion of the image to only see section with road
     model.add(Cropping2D(cropping=((train_config_.top_crop, train_config_.bottom_crop), (0, 0))))
 
-    # the following model is based on nvidia-architecher from https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/
+    # the following model is based on NVIDIA architecture[https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/]
     # i add drop out to the model to prevent over-fitting
     model.add(Conv2D(24, (5, 5), activation="relu", strides=(2, 2)))
     model.add(Dropout(train_config_.dropout_prob))
@@ -372,7 +372,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def createTrainConfigFromArgs(args):
+def create_train_config_from_args(args):
     train_config_ = TrainConfig()
 
     if args.init_model is not None:
@@ -404,10 +404,9 @@ def createTrainConfigFromArgs(args):
 
     return train_config_
 
-
-if __name__ == "__main__":
+def main():
     cmd_line_args = parse_args()
-    train_config = createTrainConfigFromArgs(cmd_line_args)
+    train_config = create_train_config_from_args(cmd_line_args)
     history_object = trainModel(train_config)
 
     if not cmd_line_args.not_show_loss:
@@ -422,3 +421,6 @@ if __name__ == "__main__":
         plt.xlabel('epoch')
         plt.legend(['training set', 'validation set'], loc='upper right')
         plt.show()
+
+if __name__ == "__main__":
+    main()
